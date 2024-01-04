@@ -22,7 +22,8 @@ describe('example configs', () => {
       },
     ]
 
-    const expected = `${expectedStart}[server.services.my_nas_ssh]
+    const expected = `${expectedStart}[server.services]
+[server.services.my_nas_ssh]
 token = "use_a_secret_that_only_you_know"
 bind_addr = "0.0.0.0:5202"`
 
@@ -45,7 +46,8 @@ bind_addr = "0.0.0.0:5202"`
       },
     ]
 
-    const expected = `${expectedStart}[server.services.my_nas_http]
+    const expected = `${expectedStart}[server.services]
+[server.services.my_nas_http]
 token = "other secret"
 bind_addr = "127.0.0.80:5202"`
 
@@ -68,7 +70,8 @@ bind_addr = "127.0.0.80:5202"`
       },
     ]
 
-    const expected = `${expectedStart}[server.services.my_nas_https]
+    const expected = `${expectedStart}[server.services]
+[server.services.my_nas_https]
 token = "other secret"
 bind_addr = "127.0.0.80:5202"`
 
@@ -113,7 +116,8 @@ describe('real configs', () => {
       },
     ]
 
-    const expected = `${expectedStart}[server.services.tcp_WL7Aza_1]
+    const expected = `${expectedStart}[server.services]
+[server.services.tcp_WL7Aza_1]
 token = "DnbauytSmV3N48YM9UfTKZ"
 bind_addr = "0.0.0.0:58515"
 

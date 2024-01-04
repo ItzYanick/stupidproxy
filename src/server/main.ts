@@ -2,6 +2,30 @@ import express from 'express'
 
 import * as auth from './routes/auth'
 
+import {
+  checkForRathole,
+  downloadRathole,
+  checkLatestRelease,
+  generateConfig,
+  runRathole,
+} from './misc/rathole'
+
+if (!checkLatestRelease()) {
+  console.log('INFO: New rathole version available')
+}
+
+const ratholeInstalled = await checkForRathole()
+
+if (!ratholeInstalled) {
+  downloadRathole()
+} else {
+  console.log('INFO: Rathole already installed')
+}
+
+generateConfig()
+
+runRathole()
+
 const app = express()
 app.use(express.json())
 

@@ -26,12 +26,5 @@ export const generateServerConfig = (tunnels: Tunnel[]): string => {
 
   config.server.services = services
 
-  const out = stringify(config)
-  return removeUnwantedSideEffects(out)
-}
-
-const removeUnwantedSideEffects = (config: string): string => {
-  // remove [server.services]\n
-  config = config.replace(/\[server.services\]\n/, '')
-  return config
+  return stringify(config)
 }
