@@ -8,26 +8,32 @@ const createQuery = (db: Database): Statement => {
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      is_admin INTEGER DEFAULT 0
     )
   `)
 }
 
 export default createQuery
 
-export const create = (username: string, password: string): void => {
+export const create = (
+  username: string,
+  password: string,
+  isAdmin: boolean = false
+): void => {
   const query = dbClient.query(`
-        INSERT INTO users (username, password) VALUES ($username, $password)
+        INSERT INTO users (username, password, is_admin) VALUES ($username, $password, $isAdmin)
     `)
   return query.run({
     $username: username,
     $password: Bun.password.hashSync(password),
+    $isAdmin: isAdmin ? 1 : 0,
   })
 }
 
 export const find = (username: string): User | null => {
   const query = dbClient.query(
-    'SELECT id, username, password FROM users WHERE username = $username'
+    'SELECT id, username, password, is_admin FROM users WHERE username = $username'
   )
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,5 +48,6 @@ export const find = (username: string): User | null => {
     id: result.id,
     username: result.username,
     password: result.password,
+    isAdmin: result.is_admin === 1,
   }
 }

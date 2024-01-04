@@ -20,7 +20,7 @@ query.run()
 // create default user if not exists
 const user = users.find('admin')
 if (!user) {
-  users.create('admin', 'admin')
+  users.create('admin', 'admin', true)
 }
 
 export default { databaseClient: db, users, tunnels }

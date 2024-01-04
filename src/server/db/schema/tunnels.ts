@@ -9,6 +9,7 @@ const createQuery = (db: Database): Statement => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       owner INTEGER NOT NULL,
       name TEXT NOT NULL,
+      description TEXT NOT NULL,
       type TEXT NOT NULL,
       port INTEGER NOT NULL,
       hostname TEXT NOT NULL,
@@ -23,17 +24,19 @@ export default createQuery
 export const create = (
   owner: number,
   name: string,
+  description: string,
   type: string,
   port: number,
   hostname: string,
   secret: string
 ): void => {
   const query = dbClient.query(`
-            INSERT INTO tunnels (owner, name, type, port, hostname, secret) VALUES ($owner, $name, $type, $port, $hostname, $secret)
+            INSERT INTO tunnels (owner, name, description, type, port, hostname, secret) VALUES ($owner, $name, $description, $type, $port, $hostname, $secret)
         `)
   return query.run({
     $owner: owner,
     $name: name,
+    $description: description,
     $type: type,
     $port: port,
     $hostname: hostname,
@@ -43,7 +46,7 @@ export const create = (
 
 export const find = (id: number): Tunnel | null => {
   const query = dbClient.query(
-    'SELECT id, owner, name, type, port, hostname, secret FROM tunnels WHERE id = $id'
+    'SELECT id, owner, name, description, type, port, hostname, secret FROM tunnels WHERE id = $id'
   )
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,6 +61,7 @@ export const find = (id: number): Tunnel | null => {
     id: result.id,
     owner: result.owner,
     name: result.name,
+    description: result.description,
     type: result.type,
     port: result.port,
     hostname: result.hostname,
@@ -67,7 +71,7 @@ export const find = (id: number): Tunnel | null => {
 
 export const findAll = (): Tunnel[] => {
   const query = dbClient.query(
-    'SELECT id, owner, name, type, port, hostname, secret FROM tunnels'
+    'SELECT id, owner, name, description, type, port, hostname, secret FROM tunnels'
   )
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,6 +81,7 @@ export const findAll = (): Tunnel[] => {
     id: tunnel.id,
     owner: tunnel.owner,
     name: tunnel.name,
+    description: tunnel.description,
     type: tunnel.type,
     port: tunnel.port,
     hostname: tunnel.hostname,
