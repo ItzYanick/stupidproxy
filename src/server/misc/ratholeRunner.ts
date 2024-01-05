@@ -61,9 +61,7 @@ export const runRathole = (): void => {
       [ratholePath, '--server', path.join(ratholeFolderPath, 'config.toml')],
       {
         onExit: () => {
-          console.log('Rathole exited')
-          unlinkSync(path.join(ratholeFolderPath, 'pid'))
-          process.exit(1)
+          cleanup()
         },
         stdout: 'inherit',
         stderr: 'inherit',
@@ -74,3 +72,24 @@ export const runRathole = (): void => {
     console.log('Rathole started')
   })
 }
+
+const cleanup = (): void => {
+  checkRunningRathole()
+    .then((running) => {
+      console.log('Cleaning up...')
+      if (!running) {
+        return
+      }
+      unlinkSync(path.join(ratholeFolderPath, 'pid'))
+      console.log('Rathole stopped')
+    })
+    .then(() => {
+      process.exit()
+    })
+}
+
+process.on('exit', cleanup)
+process.on('SIGINT', cleanup)
+process.on('SIGUSR1', cleanup)
+process.on('SIGUSR2', cleanup)
+process.on('uncaughtException', cleanup)

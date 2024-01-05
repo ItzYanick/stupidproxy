@@ -8,7 +8,7 @@ import {
   checkLatestRelease,
   generateConfig,
   runRathole,
-} from './misc/rathole'
+} from './misc/ratholeRunner'
 
 if (!checkLatestRelease()) {
   console.log('INFO: New rathole version available')
