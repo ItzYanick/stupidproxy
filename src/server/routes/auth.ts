@@ -12,7 +12,6 @@ export const login = (req: Request, res: Response) => {
       .then((valid) => {
         if (valid) {
           const currentTime = Math.floor(Date.now() / 1000)
-          const secret: string = process.env.JWT_SECRET || 'secret'
           res.json({
             token: jwt.sign(
               {
@@ -21,7 +20,7 @@ export const login = (req: Request, res: Response) => {
                 iat: currentTime,
                 exp: currentTime + 60 * 60 * 24 * 7, // 1 week
               },
-              secret
+              process.env.JWT_SECRET as string
             ),
           })
         } else {
