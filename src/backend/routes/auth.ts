@@ -37,6 +37,38 @@ export const login = (req: Request, res: Response) => {
   }
 }
 
+export const token_create = (req: Request, res: Response) => {
+  const { client } = req.body
+  const user = req.user
+
+  const client_o = db.clients.find(client)
+  if (client_o) {
+    const sec = db.tokens.create(user.sub, client_o.id)
+    res.json({ message: 'Token created', secret: sec })
+  } else {
+    res.status(400).json({ message: 'Invalid client' })
+  }
+}
+
+export const token_list = (req: Request, res: Response) => {
+  const user = req.user
+  const tokens = db.tokens.findByOwner(user.sub)
+  res.json({ tokens: tokens })
+}
+
+export const token_delete = (req: Request, res: Response) => {
+  const user = req.user
+  const { secret } = req.params
+  const tokens = db.tokens.findByOwner(user.sub)
+  const token = tokens.find((t) => t.secret === secret)
+  if (token) {
+    db.tokens.remove(token.secret)
+    res.json({ message: 'Token deleted' })
+  } else {
+    res.status(400).json({ message: 'Invalid token' })
+  }
+}
+
 export const me = (req: Request, res: Response) => {
   res.json(req.user)
 }

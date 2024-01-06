@@ -1,3 +1,4 @@
+// database
 declare type User = {
   id: number
   username: string
@@ -24,6 +25,13 @@ declare type Client = {
   name: string
 }
 
+declare type Token = {
+  secret: string
+  owner: number
+  client: number
+}
+
+// other
 declare type jwtPayload = {
   iat: number
   exp: number
