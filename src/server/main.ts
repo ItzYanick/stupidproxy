@@ -1,35 +1,26 @@
 import express from 'express'
 
+import authMiddleware from './middleware/auth'
+
 import * as auth from './routes/auth'
 
-import {
-  checkForRathole,
-  downloadRathole,
-  checkLatestRelease,
-  generateConfig,
-  runRathole,
-} from './misc/ratholeRunner'
-
-if (!checkLatestRelease()) {
-  console.log('INFO: New rathole version available')
-}
+import { checkForRathole, generateConfigs, runRathole } from './misc/bin'
 
 const ratholeInstalled = await checkForRathole()
 
 if (!ratholeInstalled) {
-  downloadRathole()
-} else {
-  console.log('INFO: Rathole already installed')
+  throw new Error('Rathole not installed')
 }
 
-generateConfig()
+generateConfigs()
 
 runRathole()
 
 const app = express()
 app.use(express.json())
 
-app.post('/api/v1/login', auth.login)
+app.post('/api/v1/auth/login', auth.login)
+app.get('/api/v1/auth/me', authMiddleware, auth.me)
 
 app.listen(3001, () => {
   console.log(`Server listening at http://localhost:3001`)
