@@ -8,12 +8,20 @@ declare type User = {
 declare type Tunnel = {
   id: number
   owner: number
+  client: number
   name: string
   description: string
   type: string
   port: number
   hostname: string
   secret: string
+  target: string
+}
+
+declare type Client = {
+  id: number
+  owner: number
+  name: string
 }
 
 declare type jwtPayload = {

@@ -1,6 +1,7 @@
 import { Database } from 'bun:sqlite'
 
 import * as users from './schema/users'
+import * as clients from './schema/clients'
 import * as tunnels from './schema/tunnels'
 
 const db = new Database('db.sqlite')
@@ -12,6 +13,9 @@ console.log('Running db test: ' + result.message)
 
 // create table if not exists
 query = users.default(db)
+query.run()
+
+query = clients.default(db)
 query.run()
 
 query = tunnels.default(db)
