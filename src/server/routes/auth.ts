@@ -15,11 +15,12 @@ export const login = (req: Request, res: Response) => {
           res.json({
             token: jwt.sign(
               {
-                sub: user.id,
-                username: user.username,
                 iat: currentTime,
                 exp: currentTime + 60 * 60 * 24 * 7, // 1 week
-              },
+                sub: user.id,
+                usr: user.username,
+                adm: user.isAdmin ? 1 : 0,
+              } satisfies jwtPayload,
               process.env.JWT_SECRET as string
             ),
           })
@@ -34,4 +35,8 @@ export const login = (req: Request, res: Response) => {
   } else {
     res.status(401).json({ message: 'Invalid username or password' })
   }
+}
+
+export const me = (req: Request, res: Response) => {
+  res.json(req.user)
 }

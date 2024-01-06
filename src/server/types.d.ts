@@ -15,3 +15,22 @@ declare type Tunnel = {
   hostname: string
   secret: string
 }
+
+declare type jwtPayload = {
+  iat: number
+  exp: number
+  sub: number
+  usr: string
+  adm: number
+}
+
+declare namespace Express {
+  export interface Request {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    user: any
+  }
+  export interface Response {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    user: any
+  }
+}
