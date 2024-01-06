@@ -85,6 +85,45 @@ export const findAll = (): Tunnel[] => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any[] = query.all()
 
+  return convertToTunnels(result)
+}
+
+export const findAllByClient = (client: number): Tunnel[] => {
+  const query = dbClient.query(
+    'SELECT id, owner, client, name, description, type, port, hostname, secret, target FROM tunnels WHERE client = $client'
+  )
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any[] = query.all({
+    $client: client,
+  })
+
+  return convertToTunnels(result)
+}
+
+export const findAllByOwner = (owner: number): Tunnel[] => {
+  const query = dbClient.query(
+    'SELECT id, owner, client, name, description, type, port, hostname, secret, target FROM tunnels WHERE owner = $owner'
+  )
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any[] = query.all({
+    $owner: owner,
+  })
+
+  return convertToTunnels(result)
+}
+
+export const remove = (id: number): void => {
+  const query = dbClient.query('DELETE FROM tunnels WHERE id = $id')
+  return query.run({
+    $id: id,
+  })
+}
+
+// helper function
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const convertToTunnels = (result: any[]): Tunnel[] => {
   return result.map((tunnel) => ({
     id: tunnel.id,
     owner: tunnel.owner,

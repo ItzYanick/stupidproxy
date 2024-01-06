@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"bun run client:dev\" \"bun run server:dev\"",
-    "client:dev": "vite",
-    "client:build": "tsc && vite build",
-    "client:preview": "vite preview",
-    "server:dev": "bun --watch src/server/main.ts"
+    "dev": "concurrently \"bun run frontend:dev\" \"bun run backend:dev\"",
+    "frontend:dev": "vite",
+    "frontend:build": "tsc && vite build",
+    "frontend:preview": "vite preview",
+    "backend:dev": "bun --watch src/backend/main.ts"
   },
   "dependencies": {
     "concurrently": "^8.2.2",

@@ -62,3 +62,10 @@ export const findByOwner = (owner: number): Client[] => {
     name: client.name,
   }))
 }
+
+export const remove = (id: number): void => {
+  const query = dbClient.query('DELETE FROM clients WHERE id = $id')
+  return query.run({
+    $id: id,
+  })
+}

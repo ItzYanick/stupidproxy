@@ -1,7 +1,6 @@
 import path from 'node:path'
 import { unlinkSync } from 'node:fs'
 
-import db from '../db'
 import { generateServerConfig } from '../config-generator/rathole'
 
 const binFolderPath = path.join('.', '_bin')
@@ -14,11 +13,8 @@ export const checkForRathole = (): Promise<boolean> => {
   return Bun.file(ratholeBinPath).exists()
 }
 
-export const generateConfigs = (): void => {
-  // generate rathole server config
-  const tunnels = db.tunnels.findAll()
-  const config = generateServerConfig(tunnels)
-  Bun.write(ratholeConfigPath, config)
+export const generateAndSaveRatholeServerConfig = (): void => {
+  Bun.write(ratholeConfigPath, generateServerConfig())
 }
 
 export const checkRunningRathole = (): Promise<boolean> => {

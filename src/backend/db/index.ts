@@ -27,4 +27,4 @@ if (!user) {
   users.create('admin', 'admin', true)
 }
 
-export default { databaseClient: db, users, tunnels }
+export default { databaseClient: db, users, tunnels, clients }

@@ -11,7 +11,7 @@ declare type Tunnel = {
   client: number
   name: string
   description: string
-  type: string
+  type: TunnelType
   port: number
   hostname: string
   secret: string
