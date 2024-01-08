@@ -46,6 +46,6 @@ app.delete('/api/v1/tunnel/:id', authMiddleware, tunnel.remove)
 
 app.get('/api/v1/clientOnly/generate', tokenMiddleware, clientOnly.generate)
 
-app.listen(3001, () => {
-  console.log(`Server listening at http://localhost:3001`)
+app.listen(process.env.API_BIND, () => {
+  console.log(`Server listening at https://${process.env.PUBLIC_DOMAIN}`)
 })

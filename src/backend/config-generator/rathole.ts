@@ -37,7 +37,7 @@ export const generateClientConfig = (client: number): string => {
 
   const config = {
     client: {
-      remote_addr: `${process.env.PUBLIC_HOST}:${process.env.RATHOLE_PORT}`,
+      remote_addr: `${process.env.PUBLIC_DOMAIN}:${process.env.RATHOLE_PORT}`,
       services: null,
     },
   }

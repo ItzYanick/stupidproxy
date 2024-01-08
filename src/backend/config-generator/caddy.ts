@@ -9,6 +9,10 @@ export const generateServerConfig = (tunnels: Tunnel[]): string => {
   config += `  "email": "${process.env.CADDY_EMAIL}",\n`
   config += '}\n'
 
+  config += `${process.env.PUBLIC_DOMAIN} {\n`
+  config += `  reverse_proxy localhost:${process.env.API_BIND}\n`
+  config += '}\n'
+
   for (let i = 0; i < tunnels.length; i++) {
     const tunnel = tunnels[i]
     const isHTTP = tunnel.type === 'http' || tunnel.type === 'https'
