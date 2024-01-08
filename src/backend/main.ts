@@ -42,7 +42,7 @@ app.delete('/api/v1/client/:id', authMiddleware, client.remove)
 
 app.get('/api/v1/tunnel', authMiddleware, tunnel.list)
 app.post('/api/v1/tunnel', authMiddleware, tunnel.create)
-app.delete('/api/v1/tunnel/:secret', authMiddleware, tunnel.remove)
+app.delete('/api/v1/tunnel/:id', authMiddleware, tunnel.remove)
 
 app.get('/api/v1/clientOnly/generate', tokenMiddleware, clientOnly.generate)
 

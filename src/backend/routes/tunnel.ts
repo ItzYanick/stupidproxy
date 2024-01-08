@@ -73,11 +73,13 @@ export const remove = (req: Request, res: Response) => {
   const tunnel = db.tunnels.find(parsedId)
 
   if (!tunnel) {
+    console.log('Tunnel not found')
     res.status(403).json({ message: 'Forbidden' })
     return
   }
 
   if (tunnel.owner !== user.sub) {
+    console.log('Tunnel not owned by user')
     res.status(403).json({ message: 'Forbidden' })
     return
   }
