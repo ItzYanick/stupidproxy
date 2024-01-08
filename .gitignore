@@ -1,6 +1,7 @@
 # Custom
 db.sqlite
 _bin
+.env
 
 # Logs
 logs
