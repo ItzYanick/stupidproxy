@@ -4,7 +4,7 @@ import db from '../db'
 import { TunnelType } from '../enums'
 import { addPort, findFreePort } from '../misc/ports'
 import { generateRandomString } from '../misc/random'
-import { generateAndSaveRatholeServerConfig } from '../misc/bin'
+import { generateAndSaveServerConfig } from '../misc/bin'
 
 export const list = (req: Request, res: Response) => {
   const user = req.user
@@ -63,7 +63,7 @@ export const create = (req: Request, res: Response) => {
 
   res.status(201).json({ message: 'Tunnel created' })
 
-  generateAndSaveRatholeServerConfig()
+  generateAndSaveServerConfig()
 }
 
 export const remove = (req: Request, res: Response) => {
@@ -88,5 +88,5 @@ export const remove = (req: Request, res: Response) => {
 
   res.status(200).json({ message: 'Tunnel deleted' })
 
-  generateAndSaveRatholeServerConfig()
+  generateAndSaveServerConfig()
 }

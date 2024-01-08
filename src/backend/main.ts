@@ -10,7 +10,7 @@ import * as clientOnly from './routes/clientOnly'
 
 import {
   checkForRathole,
-  generateAndSaveRatholeServerConfig,
+  generateAndSaveServerConfig,
   runRathole,
 } from './misc/bin'
 import { loadPorts } from './misc/ports'
@@ -23,7 +23,7 @@ if (!ratholeInstalled) {
 
 loadPorts()
 
-generateAndSaveRatholeServerConfig()
+generateAndSaveServerConfig()
 
 runRathole()
 

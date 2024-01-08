@@ -3,21 +3,24 @@ import { unlinkSync } from 'node:fs'
 
 import db from '../db'
 
-import { generateServerConfig } from '../config-generator/rathole'
+import * as ratholeConfig from '../config-generator/rathole'
+import * as caddyConfig from '../config-generator/caddy'
 
 const binFolderPath = path.join('.', '_bin')
 const ratholeBinPath = path.join(binFolderPath, 'rathole')
 
 const configFolderPath = path.join('/tmp', 'stupidproxy')
 const ratholeConfigPath = path.join(configFolderPath, 'rathole.toml')
+const caddyConfigPath = path.join(configFolderPath, 'Caddyfile')
 
 export const checkForRathole = (): Promise<boolean> => {
   return Bun.file(ratholeBinPath).exists()
 }
 
-export const generateAndSaveRatholeServerConfig = (): void => {
+export const generateAndSaveServerConfig = (): void => {
   const tunnels = db.tunnels.findAll()
-  Bun.write(ratholeConfigPath, generateServerConfig(tunnels))
+  Bun.write(ratholeConfigPath, ratholeConfig.generateServerConfig(tunnels))
+  Bun.write(caddyConfigPath, caddyConfig.generateServerConfig(tunnels))
 }
 
 export const checkRunningRathole = (): Promise<boolean> => {
