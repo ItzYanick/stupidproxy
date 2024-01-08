@@ -11,6 +11,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { Button } from '@/components/ui/button'
+import { LogOut } from 'lucide-react'
 
 export default function DashboardLayout() {
   const navigate = useNavigate()
@@ -36,7 +37,7 @@ export default function DashboardLayout() {
             <Item to="/dashboard/tunnels" name="Tunnels" />
             <Item to="/dashboard/clients" name="Clients" />
             <Button variant="destructive" onClick={() => logout()}>
-              Logout
+              <LogOut className="mr-2 h-4 w-4" /> Logout
             </Button>
           </NavigationMenuList>
         </NavigationMenu>

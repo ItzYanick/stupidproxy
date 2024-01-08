@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Plus, Trash, KeyRound, Eye, EyeOff } from 'lucide-react'
 
 import useAuth from '../hooks/useAuth'
 
@@ -128,6 +129,7 @@ export default function DashboardClients() {
                       onClick={() => generateToken(client.id)}
                       variant="outline"
                     >
+                      <KeyRound className="mr-2 h-4 w-4" />
                       Generate
                     </Button>
                   )}
@@ -142,8 +144,9 @@ export default function DashboardClients() {
                         deleteClient(client.id)
                       }
                     }}
+                    size="icon"
                   >
-                    Delete
+                    <Trash className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -186,7 +189,9 @@ function DialogNewClient(props: { callback: () => void }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">New Client</Button>
+        <Button variant="outline" size="icon">
+          <Plus className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit}>
@@ -219,8 +224,16 @@ function PasswordField(props: { value: string }) {
         value={props.value}
         readOnly
       />
-      <Button variant="outline" onClick={() => setIsVisible(!isVisible)}>
-        {isVisible ? 'Hide' : 'Show'}
+      <Button
+        variant="outline"
+        onClick={() => setIsVisible(!isVisible)}
+        size="icon"
+      >
+        {isVisible ? (
+          <Eye className="h-4 w-4" />
+        ) : (
+          <EyeOff className="h-4 w-4" />
+        )}
       </Button>
     </div>
   )

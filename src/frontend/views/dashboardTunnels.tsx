@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Plus, Trash } from 'lucide-react'
 
 import useAuth from '../hooks/useAuth'
 
@@ -123,8 +124,9 @@ export default function DashboardTunnels() {
                         deleteTunnel(tunnel.id)
                       }
                     }}
+                    size="icon"
                   >
-                    Delete
+                    <Trash className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -195,7 +197,9 @@ function DialogNewTunnel(props: { callback: () => void; clients: Client[] }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">New Tunnel</Button>
+        <Button variant="outline" size="icon">
+          <Plus className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit}>
