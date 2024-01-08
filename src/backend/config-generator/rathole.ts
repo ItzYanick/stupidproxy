@@ -5,7 +5,7 @@ import db from '../db'
 export const generateServerConfig = (tunnels: Tunnel[]): string => {
   const config = {
     server: {
-      bind_addr: `0.0.0.0:${process.env.RATHOLE_PORT}`,
+      bind_addr: `${process.env.RATHOLE_BIND}:${process.env.RATHOLE_PORT}`,
       services: null,
     },
   }
@@ -15,12 +15,13 @@ export const generateServerConfig = (tunnels: Tunnel[]): string => {
 
   tunnels.forEach((tunnel) => {
     const isHTTP = tunnel.type === 'http' || tunnel.type === 'https'
-    let bindIP = `0.0.0.0`
+    let bindIP = process.env.RATHOLE_BIND
     if (isHTTP) {
-      bindIP = `127.0.0.80`
+      bindIP = process.env.RATHOLE_BIND_HTTP
     }
 
     services[tunnel.name] = {
+      type: isHTTP ? 'tcp' : tunnel.type,
       token: tunnel.secret,
       bind_addr: `${bindIP}:${tunnel.port}`,
     }
@@ -45,7 +46,9 @@ export const generateClientConfig = (client: number): string => {
   const services: any = {}
 
   tunnel.forEach((tunnel) => {
+    const isHTTP = tunnel.type === 'http' || tunnel.type === 'https'
     services[tunnel.name] = {
+      type: isHTTP ? 'tcp' : tunnel.type,
       token: tunnel.secret,
       local_addr: `${tunnel.target}`,
     }
