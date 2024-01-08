@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import useAuth from '../hooks/useAuth'
-
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -12,6 +10,8 @@ import {
 } from '@/components/ui/navigation-menu'
 import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
+
+import useAuth from '../hooks/useAuth'
 
 export default function DashboardLayout() {
   const navigate = useNavigate()

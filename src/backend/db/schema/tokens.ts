@@ -1,4 +1,5 @@
 import { Database, Statement } from 'bun:sqlite'
+
 import { generateRandomString } from '../../misc/random'
 
 let dbClient: Database

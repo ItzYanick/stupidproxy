@@ -1,13 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 import { ThemeProvider } from '@/components/theme-provider'
 
-import '../../app/globals.css'
+import './globals.css'
+
+import { AuthProvider } from './context/AuthContext'
 
 import Base from './views/base'
 import Login from './views/login'
-import { AuthProvider } from './context/AuthContext'
 import DashboardLayout from './views/dashboardLayout'
 import DashboardIndex from './views/dashboardIndex'
 import DashboardTunnels from './views/dashboardTunnels'

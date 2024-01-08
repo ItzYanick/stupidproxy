@@ -2,9 +2,7 @@ import { stringify } from 'smol-toml'
 
 import db from '../db'
 
-export const generateServerConfig = (): string => {
-  const tunnels = db.tunnels.findAll()
-
+export const generateServerConfig = (tunnels: Tunnel[]): string => {
   const config = {
     server: {
       bind_addr: `0.0.0.0:${process.env.RATHOLE_PORT}`,

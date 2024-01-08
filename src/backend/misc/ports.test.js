@@ -44,45 +44,45 @@ describe('generating ports', () => {
 describe('checking ports', () => {
   test('big port list test suite', () => {
     const ports = Array.from({ length: 100000 }, generatePort)
-    const availablePorts = ports.filter(isPortAvailable)
+    const availablePorts = ports.filter((port) => isPortAvailable('tcp', port))
     expect(availablePorts.length).toBe(ports.length)
 
-    addPort(ports[0])
-    expect(isPortAvailable(ports[0])).toBe(false)
-    const availablePorts2 = ports.filter(isPortAvailable)
+    addPort('tcp', ports[0])
+    expect(isPortAvailable('tcp', ports[0])).toBe(false)
+    const availablePorts2 = ports.filter((port) => isPortAvailable('tcp', port))
     expect(availablePorts2.length).toBeGreaterThanOrEqual(0)
     expect(availablePorts2.length).toBeLessThan(ports.length)
 
-    if (isPortAvailable(ports[1])) {
-      addPort(ports[1])
+    if (isPortAvailable('tcp', ports[1])) {
+      addPort('tcp', ports[1])
     }
-    expect(isPortAvailable(ports[1])).toBe(false)
+    expect(isPortAvailable('tcp', ports[1])).toBe(false)
 
-    if (isPortAvailable(ports[2])) {
-      addPort(ports[2])
+    if (isPortAvailable('tcp', ports[2])) {
+      addPort('tcp', ports[2])
     }
-    expect(isPortAvailable(ports[2])).toBe(false)
+    expect(isPortAvailable('tcp', ports[2])).toBe(false)
 
-    const freePort = findFreePort()
+    const freePort = findFreePort('tcp')
     expect(freePort).toBeWithin(startPort, endPort)
-    expect(isPortAvailable(freePort)).toBe(true)
-    addPort(freePort)
-    expect(isPortAvailable(freePort)).toBe(false)
+    expect(isPortAvailable('tcp', freePort)).toBe(true)
+    addPort('tcp', freePort)
+    expect(isPortAvailable('tcp', freePort)).toBe(false)
 
-    removePort(freePort)
-    expect(isPortAvailable(freePort)).toBe(true)
+    removePort('tcp', freePort)
+    expect(isPortAvailable('tcp', freePort)).toBe(true)
 
-    expect(isPortAvailable(ports[0])).toBe(false)
-    removePort(ports[0])
-    expect(isPortAvailable(ports[0])).toBe(true)
+    expect(isPortAvailable('tcp', ports[0])).toBe(false)
+    removePort('tcp', ports[0])
+    expect(isPortAvailable('tcp', ports[0])).toBe(true)
 
-    removePort(ports[1])
-    expect(isPortAvailable(ports[1])).toBe(true)
+    removePort('tcp', ports[1])
+    expect(isPortAvailable('tcp', ports[1])).toBe(true)
 
-    const freePort2 = findFreePort()
+    const freePort2 = findFreePort('tcp')
     expect(freePort2).toBeWithin(startPort, endPort)
-    expect(isPortAvailable(freePort2)).toBe(true)
-    addPort(freePort2)
-    expect(isPortAvailable(freePort2)).toBe(false)
+    expect(isPortAvailable('tcp', freePort2)).toBe(true)
+    addPort('tcp', freePort2)
+    expect(isPortAvailable('tcp', freePort2)).toBe(false)
   })
 })

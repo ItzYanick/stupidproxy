@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
 import db from '../db'
+import { TunnelType } from '../enums'
 import { addPort, findFreePort } from '../misc/ports'
 import { generateRandomString } from '../misc/random'
-import { TunnelType } from '../enums'
 import { generateAndSaveRatholeServerConfig } from '../misc/bin'
 
 export const list = (req: Request, res: Response) => {
