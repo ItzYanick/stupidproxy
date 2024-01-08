@@ -1,5 +1,7 @@
 # stupidproxy
 
+> ⚠️ This project is still in development and not ready for production use. Expect breaking changes and security issues.
+
 A simple reverse proxy server that can be used to bypass NAT or firewalls.
 A client (behind NAT) connects to a server (public IP) and the server forwards the traffic to the client.
 
