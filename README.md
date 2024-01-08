@@ -1,30 +1,23 @@
-# React + TypeScript + Vite
+# stupidproxy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple reverse proxy server that can be used to bypass NAT or firewalls.
+A client (behind NAT) connects to a server (public IP) and the server forwards the traffic to the client.
 
-Currently, two official plugins are available:
+It is using [rathole](https://github.com/rapiz1/rathole) for the NAT traversal and [caddy](https://caddyserver.com/) as a http/https reverse proxy.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A similar software is [boringproxy](https://boringproxy.io/) but it can't forward udp traffic that is why I created this.
 
-## Expanding the ESLint configuration
+## Usage
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Instructions will be added soon.
 
-- Configure the top-level `parserOptions` property like this:
+## Credits
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- [rathole](https://github.com/rapiz1/rathole) for the NAT traversal
+- [caddy](https://caddyserver.com/) for the http/https reverse proxy
+- [boringproxy](https://boringproxy.io/) for the inspiration
+- [shadcn/ui](https://ui.shadcn.com/) for the web components
+- [Lucide](https://lucide.dev/) for the icons
+- [tailwindcss](https://tailwindcss.com/) for the css framework
+- [vite](https://vitejs.dev/) for the build tool
+- [bun](https://bun.dev) for this cool JavaScript runtime
