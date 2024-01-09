@@ -4,11 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --restart-tries -1 \"bun --bun run frontend:dev\" \"bun --bun run backend:dev\"",
+    "server:dev": "concurrently --restart-tries -1 \"bun --bun run frontend:dev\" \"bun --bun run backend:dev\"",
     "frontend:dev": "vite",
     "frontend:build": "tsc && vite build",
     "frontend:preview": "vite preview",
-    "backend:dev": "bun --watch src/backend/main.ts"
+    "frontend:clean": "rm -rf dist",
+    "backend:dev": "bun --watch src/backend/main.ts",
+    "backend:clean": "rm -rf db.sqlite && rm -rf _bin",
+    "client:generate": "cd src/client && go generate",
+    "client:build": "go build -o _dist/client src/client/main.go && strip _dist/client",
+    "client:dist": "bun run client:generate && bun run client:build",
+    "client:clean": "rm -rf _dist && rm -rf src/client/_bin",
+    "download:rathole": "./scripts/download-rathole.sh",
+    "download:caddy": "./scripts/download-caddy.sh",
+    "clean": "bun run frontend:clean && bun run backend:clean && bun run client:clean"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",
