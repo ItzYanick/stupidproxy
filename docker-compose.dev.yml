@@ -1,0 +1,19 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    volumes:
+      - ./_bin:/usr/src/app/_bin
+      - ./db:/usr/src/app/_db
+    network_mode: host
+    environment:
+      - JWT_SECRET=secret
+      - PUBLIC_DOMAIN=localhost
+      - API_BIND=3001
+      - RATHOLE_BIND=0.0.0.0
+      - RATHOLE_BIND_HTTP=127.0.0.80
+      - RATHOLE_PORT=9999
+      - CADDY_TESTING=true
+      - CADDY_EMAIL=example@example.org
