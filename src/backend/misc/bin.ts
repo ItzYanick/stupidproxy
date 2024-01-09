@@ -35,6 +35,7 @@ export const runRathole = (): void => {
     }
     const proc = Bun.spawn([ratholeBinPath, '--server', ratholeConfigPath], {
       onExit: () => {
+        console.log('Rathole exited')
         cleanup()
       },
       stdout: 'inherit',

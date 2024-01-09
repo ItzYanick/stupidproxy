@@ -46,6 +46,8 @@ app.delete('/api/v1/tunnel/:id', authMiddleware, tunnel.remove)
 
 app.get('/api/v1/clientOnly/generate', tokenMiddleware, clientOnly.generate)
 
+app.use(express.static('dist'))
+
 app.listen(process.env.API_BIND, () => {
   console.log(`Server listening at https://${process.env.PUBLIC_DOMAIN}`)
 })

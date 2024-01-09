@@ -5,7 +5,7 @@ import * as clients from './schema/clients'
 import * as tunnels from './schema/tunnels'
 import * as tokens from './schema/tokens'
 
-const db = new Database('db.sqlite')
+const db = new Database('_db/db.sqlite')
 
 let query = db.query("select 'OK' as message;")
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

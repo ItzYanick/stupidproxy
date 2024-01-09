@@ -35,9 +35,15 @@ export const generateServerConfig = (tunnels: Tunnel[]): string => {
 export const generateClientConfig = (client: number): string => {
   const tunnel = db.tunnels.findAllByClient(client)
 
+  // quick fix for localhost
+  const remoteDomainPart =
+    process.env.PUBLIC_DOMAIN === 'localhost'
+      ? '127.0.0.1'
+      : `${process.env.PUBLIC_DOMAIN}`
+
   const config = {
     client: {
-      remote_addr: `${process.env.PUBLIC_DOMAIN}:${process.env.RATHOLE_PORT}`,
+      remote_addr: `${remoteDomainPart}:${process.env.RATHOLE_PORT}`,
       services: null,
     },
   }

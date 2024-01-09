@@ -10,6 +10,7 @@
     "frontend:preview": "vite preview",
     "frontend:clean": "rm -rf dist",
     "backend:dev": "bun --watch src/backend/main.ts",
+    "backend:build": "bun build src/backend/main.ts --outdir ./bin --target bun",
     "backend:clean": "rm -rf db.sqlite && rm -rf _bin",
     "client:generate": "cd src/client && go generate",
     "client:build": "go build -o _dist/client src/client/main.go && strip _dist/client",
