@@ -26,10 +26,7 @@ ENV NODE_ENV=production
 RUN bun run server:build
 
 # Release stage
-FROM debian:bookworm-slim as release
-## hotfix because bun doesnt support libssl3
-RUN apt-get update && apt-get install -y \
-    libssl3
+FROM gcr.io/distroless/cc-debian12 as release
 COPY --from=base /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /app
 
