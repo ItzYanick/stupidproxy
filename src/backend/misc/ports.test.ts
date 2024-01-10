@@ -9,6 +9,7 @@ import {
   findFreePort,
   removePort,
 } from './ports'
+import { TunnelType } from '../enums'
 
 describe('generating ports', () => {
   test('generates a port', () => {
@@ -44,45 +45,49 @@ describe('generating ports', () => {
 describe('checking ports', () => {
   test('big port list test suite', () => {
     const ports = Array.from({ length: 100000 }, generatePort)
-    const availablePorts = ports.filter((port) => isPortAvailable('tcp', port))
+    const availablePorts = ports.filter((port) =>
+      isPortAvailable(TunnelType.tcp, port)
+    )
     expect(availablePorts.length).toBe(ports.length)
 
-    addPort('tcp', ports[0])
-    expect(isPortAvailable('tcp', ports[0])).toBe(false)
-    const availablePorts2 = ports.filter((port) => isPortAvailable('tcp', port))
+    addPort(TunnelType.tcp, ports[0])
+    expect(isPortAvailable(TunnelType.tcp, ports[0])).toBe(false)
+    const availablePorts2 = ports.filter((port) =>
+      isPortAvailable(TunnelType.tcp, port)
+    )
     expect(availablePorts2.length).toBeGreaterThanOrEqual(0)
     expect(availablePorts2.length).toBeLessThan(ports.length)
 
-    if (isPortAvailable('tcp', ports[1])) {
-      addPort('tcp', ports[1])
+    if (isPortAvailable(TunnelType.tcp, ports[1])) {
+      addPort(TunnelType.tcp, ports[1])
     }
-    expect(isPortAvailable('tcp', ports[1])).toBe(false)
+    expect(isPortAvailable(TunnelType.tcp, ports[1])).toBe(false)
 
-    if (isPortAvailable('tcp', ports[2])) {
-      addPort('tcp', ports[2])
+    if (isPortAvailable(TunnelType.tcp, ports[2])) {
+      addPort(TunnelType.tcp, ports[2])
     }
-    expect(isPortAvailable('tcp', ports[2])).toBe(false)
+    expect(isPortAvailable(TunnelType.tcp, ports[2])).toBe(false)
 
-    const freePort = findFreePort('tcp')
+    const freePort = findFreePort(TunnelType.tcp)
     expect(freePort).toBeWithin(startPort, endPort)
-    expect(isPortAvailable('tcp', freePort)).toBe(true)
-    addPort('tcp', freePort)
-    expect(isPortAvailable('tcp', freePort)).toBe(false)
+    expect(isPortAvailable(TunnelType.tcp, freePort)).toBe(true)
+    addPort(TunnelType.tcp, freePort)
+    expect(isPortAvailable(TunnelType.tcp, freePort)).toBe(false)
 
-    removePort('tcp', freePort)
-    expect(isPortAvailable('tcp', freePort)).toBe(true)
+    removePort(TunnelType.tcp, freePort)
+    expect(isPortAvailable(TunnelType.tcp, freePort)).toBe(true)
 
-    expect(isPortAvailable('tcp', ports[0])).toBe(false)
-    removePort('tcp', ports[0])
-    expect(isPortAvailable('tcp', ports[0])).toBe(true)
+    expect(isPortAvailable(TunnelType.tcp, ports[0])).toBe(false)
+    removePort(TunnelType.tcp, ports[0])
+    expect(isPortAvailable(TunnelType.tcp, ports[0])).toBe(true)
 
-    removePort('tcp', ports[1])
-    expect(isPortAvailable('tcp', ports[1])).toBe(true)
+    removePort(TunnelType.tcp, ports[1])
+    expect(isPortAvailable(TunnelType.tcp, ports[1])).toBe(true)
 
-    const freePort2 = findFreePort('tcp')
+    const freePort2 = findFreePort(TunnelType.tcp)
     expect(freePort2).toBeWithin(startPort, endPort)
-    expect(isPortAvailable('tcp', freePort2)).toBe(true)
-    addPort('tcp', freePort2)
-    expect(isPortAvailable('tcp', freePort2)).toBe(false)
+    expect(isPortAvailable(TunnelType.tcp, freePort2)).toBe(true)
+    addPort(TunnelType.tcp, freePort2)
+    expect(isPortAvailable(TunnelType.tcp, freePort2)).toBe(false)
   })
 })
