@@ -16,7 +16,6 @@
     "backend:build": "bun build src/backend/main.ts --outdir ./_build/backend --target bun",
     "client:generate": "cd src/client && go generate",
     "client:build": "go build -o _build/client/client src/client/main.go && strip _build/client/client",
-    "client:dist": "bun run client:generate && bun run client:build",
     "clean": "rm -rf _build && rm -rf _bin && rm -rf src/client/_bin"
   },
   "dependencies": {
