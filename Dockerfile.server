@@ -8,12 +8,13 @@ RUN apt-get update && apt-get install -y \
     unzip
 RUN mkdir -p /temp/dev
 COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
 RUN mkdir -p /temp/prod
 COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
 COPY scripts /temp/prod/scripts
 RUN cd /temp/prod && bun run download
+
+RUN cd /temp/dev && bun install --frozen-lockfile
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # Build stage
 FROM base AS builder
