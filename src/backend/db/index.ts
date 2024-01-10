@@ -1,9 +1,13 @@
+import fs from 'node:fs'
 import { Database } from 'bun:sqlite'
 
 import * as users from './schema/users'
 import * as clients from './schema/clients'
 import * as tunnels from './schema/tunnels'
 import * as tokens from './schema/tokens'
+
+// check if _db folder exists
+fs.mkdirSync('_db', { recursive: true })
 
 const db = new Database('_db/db.sqlite')
 
