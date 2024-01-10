@@ -19,4 +19,8 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: '_build/frontend',
+    emptyOutDir: true,
+  },
 })

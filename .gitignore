@@ -1,9 +1,8 @@
 # Custom
-db.sqlite
 _bin
-_dist
-bin
-dist
+_build
+_db
+
 .env
 
 # Logs

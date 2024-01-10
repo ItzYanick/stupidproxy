@@ -1,34 +1,40 @@
 FROM oven/bun:1-debian as base
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
-FROM base AS install
+# Module Stage (for caching)
+FROM base AS modules
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip
 RUN mkdir -p /temp/dev
 COPY package.json bun.lockb /temp/dev/
 RUN cd /temp/dev && bun install --frozen-lockfile
-
-# install with --production (exclude devDependencies)
 RUN mkdir -p /temp/prod
 COPY package.json bun.lockb /temp/prod/
 RUN cd /temp/prod && bun install --frozen-lockfile --production
+COPY scripts /temp/prod/scripts
+RUN cd /temp/prod && bun run download
 
+# Build stage
 FROM base AS builder
-COPY --from=install /temp/dev/node_modules node_modules
+COPY --from=modules /temp/dev/node_modules node_modules
 COPY . .
 
 ENV NODE_ENV=production
-RUN bun run frontend:build
-RUN bun run backend:build
 
+RUN bun run server:build
+
+# Release stage
 FROM debian:bookworm-slim as release
+## hotfix because bun doesnt support libssl3
 RUN apt-get update && apt-get install -y \
     libssl3
-WORKDIR /usr/src/app
-
 COPY --from=base /usr/local/bin/bun /usr/local/bin/bun
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=builder /usr/src/app/dist dist
-COPY --from=builder /usr/src/app/bin .
+WORKDIR /app
+
+COPY --from=modules /temp/prod/node_modules node_modules
+COPY --from=modules /temp/prod/_bin _bin
+COPY --from=builder /app/_build/frontend dist
+COPY --from=builder /app/_build/backend .
 
 CMD ["/usr/local/bin/bun", "run", "main.js"]

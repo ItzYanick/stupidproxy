@@ -4,21 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "download": "bun run download:rathole && bun run download:caddy",
+    "download:rathole": "./scripts/download-rathole.sh",
+    "download:caddy": "./scripts/download-caddy.sh",
     "server:dev": "concurrently --restart-tries -1 \"bun --bun run frontend:dev\" \"bun --bun run backend:dev\"",
+    "server:build": "bun run frontend:build && bun run backend:build",
     "frontend:dev": "vite",
     "frontend:build": "tsc && vite build",
     "frontend:preview": "vite preview",
-    "frontend:clean": "rm -rf dist",
     "backend:dev": "bun --watch src/backend/main.ts",
-    "backend:build": "bun build src/backend/main.ts --outdir ./bin --target bun",
-    "backend:clean": "rm -rf db.sqlite && rm -rf _bin",
+    "backend:build": "bun build src/backend/main.ts --outdir ./_build/backend --target bun",
     "client:generate": "cd src/client && go generate",
-    "client:build": "go build -o _dist/client src/client/main.go && strip _dist/client",
+    "client:build": "go build -o _build/client/client src/client/main.go && strip _build/client/client",
     "client:dist": "bun run client:generate && bun run client:build",
-    "client:clean": "rm -rf _dist && rm -rf src/client/_bin",
-    "download:rathole": "./scripts/download-rathole.sh",
-    "download:caddy": "./scripts/download-caddy.sh",
-    "clean": "bun run frontend:clean && bun run backend:clean && bun run client:clean"
+    "clean": "rm -rf _build && rm -rf _bin && rm -rf src/client/_bin"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",

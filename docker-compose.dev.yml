@@ -4,10 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
-    volumes:
-      - ./_bin:/usr/src/app/_bin
-      - ./db:/usr/src/app/_db
     network_mode: host
+    volumes:
+      - ./_db:/app/_db
     environment:
       - JWT_SECRET=secret
       - PUBLIC_DOMAIN=localhost

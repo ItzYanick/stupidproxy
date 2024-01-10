@@ -1,9 +1,6 @@
 _bin
-_dist
-bin
-dist
-node_modules
-.env
+_build
+_db
 
 node_modules
 Dockerfile*
