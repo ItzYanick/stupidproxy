@@ -2,11 +2,13 @@ import express from 'express'
 
 import authMiddleware from './middleware/auth'
 import tokenMiddleware from './middleware/token'
+import isAdmin from './middleware/isAdmin'
 
 import * as auth from './routes/auth'
 import * as client from './routes/client'
 import * as tunnel from './routes/tunnel'
 import * as clientOnly from './routes/clientOnly'
+import * as admin from './routes/admin'
 
 import {
   checkForRathole,
@@ -57,6 +59,13 @@ app.post('/api/v1/tunnel', authMiddleware, tunnel.create)
 app.delete('/api/v1/tunnel/:id', authMiddleware, tunnel.remove)
 
 app.get('/api/v1/clientOnly/generate', tokenMiddleware, clientOnly.generate)
+
+app.post(
+  '/api/v1/admin/createAccount',
+  authMiddleware,
+  isAdmin,
+  admin.createAccount
+)
 
 app.use(express.static('dist'))
 app.get('*', (_, res) => {
