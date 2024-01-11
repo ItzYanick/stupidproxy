@@ -14,7 +14,6 @@ COPY scripts /temp/prod/scripts
 RUN cd /temp/prod && bun run download
 
 RUN cd /temp/dev && bun install --frozen-lockfile
-RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # Build stage
 FROM base AS builder
@@ -30,9 +29,8 @@ FROM gcr.io/distroless/cc-debian12 as release
 COPY --from=base /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /app
 
-COPY --from=modules /temp/prod/node_modules node_modules
 COPY --from=modules /temp/prod/_bin _bin
 COPY --from=builder /app/_build/frontend dist
 COPY --from=builder /app/_build/backend .
 
-CMD ["/usr/local/bin/bun", "run", "main.js"]
+ENTRYPOINT ["/usr/local/bin/bun", "run", "main.js"]
