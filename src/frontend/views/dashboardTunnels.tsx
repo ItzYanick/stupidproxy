@@ -245,12 +245,8 @@ function DialogNewTunnel(props: { callback: () => void; clients: Client[] }) {
             <SelectContent>
               <SelectItem value="tcp">TCP</SelectItem>
               <SelectItem value="udp">UDP</SelectItem>
-              <SelectItem value="http" disabled>
-                HTTP
-              </SelectItem>
-              <SelectItem value="https" disabled>
-                HTTPS
-              </SelectItem>
+              <SelectItem value="http">HTTP</SelectItem>
+              <SelectItem value="https">HTTPS</SelectItem>
             </SelectContent>
           </Select>
           <Input
