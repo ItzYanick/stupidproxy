@@ -14,6 +14,7 @@ import DashboardLayout from './views/dashboardLayout'
 import DashboardIndex from './views/dashboardIndex'
 import DashboardTunnels from './views/dashboardTunnels'
 import DashboardClients from './views/dashboardClients'
+import DashboardSettings from './views/dashboardSettings'
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: 'clients',
         element: <DashboardClients />,
+      },
+      {
+        path: 'settings',
+        element: <DashboardSettings />,
       },
     ],
   },

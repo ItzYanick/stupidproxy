@@ -46,6 +46,7 @@ app.get('/api/v1/auth/me', authMiddleware, auth.me)
 app.get('/api/v1/auth/token', authMiddleware, auth.token_list)
 app.post('/api/v1/auth/token', authMiddleware, auth.token_create)
 app.delete('/api/v1/auth/token/:secret', authMiddleware, auth.token_delete)
+app.post('/api/v1/auth/changePassword', authMiddleware, auth.changePassword)
 
 app.get('/api/v1/client', authMiddleware, client.list)
 app.post('/api/v1/client', authMiddleware, client.create)

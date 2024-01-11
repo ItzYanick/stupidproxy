@@ -51,3 +51,13 @@ export const find = (username: string): User | null => {
     isAdmin: result.is_admin === 1,
   }
 }
+
+export const updatePassword = (username: string, password: string): void => {
+  const query = dbClient.query(
+    'UPDATE users SET password = $password WHERE username = $username'
+  )
+  query.run({
+    $username: username,
+    $password: Bun.password.hashSync(password),
+  })
+}

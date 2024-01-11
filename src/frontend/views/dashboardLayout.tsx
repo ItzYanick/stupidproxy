@@ -8,14 +8,12 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
-import { Button } from '@/components/ui/button'
-import { LogOut } from 'lucide-react'
 
 import useAuth from '../hooks/useAuth'
 
 export default function DashboardLayout() {
   const navigate = useNavigate()
-  const { isLoggedIn, logout } = useAuth()
+  const { isLoggedIn } = useAuth()
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -36,9 +34,7 @@ export default function DashboardLayout() {
             <Item to="/dashboard" name="Dashboard" />
             <Item to="/dashboard/tunnels" name="Tunnels" />
             <Item to="/dashboard/clients" name="Clients" />
-            <Button variant="destructive" onClick={() => logout()}>
-              <LogOut className="mr-2 h-4 w-4" /> Logout
-            </Button>
+            <Item to="/dashboard/settings" name="Settings" />
           </NavigationMenuList>
         </NavigationMenu>
       </div>

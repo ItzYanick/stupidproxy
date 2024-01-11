@@ -69,6 +69,26 @@ export const token_delete = (req: Request, res: Response) => {
   }
 }
 
+export const changePassword = (req: Request, res: Response) => {
+  const user = req.user
+  const dbUser = db.users.find(user.usr)
+  const { oldPassword, newPassword } = req.body
+  Bun.password
+    .verify(oldPassword, dbUser!.password)
+    .then((valid) => {
+      if (valid) {
+        db.users.updatePassword(user.usr, newPassword)
+        res.json({ message: 'Password changed' })
+      } else {
+        res.status(401).json({ message: 'Invalid password' })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: 'Internal server error' })
+    })
+}
+
 export const me = (req: Request, res: Response) => {
   res.json(req.user)
 }
