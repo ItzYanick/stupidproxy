@@ -69,7 +69,9 @@ export const runCaddy = (): void => {
       {
         onExit: () => {
           console.log('Caddy exited')
-          cleanup()
+          if (process.env.CADDY_TESTING !== 'true') {
+            cleanup()
+          }
         },
         stdout: 'inherit',
         stderr: 'inherit',
