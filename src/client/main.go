@@ -18,8 +18,9 @@ import (
 //go:embed _bin/rathole
 var filePayload []byte
 
-const clientPath = "/tmp/stupidproxy/rathole"
-const clientTmpPath = "/tmp/stupidproxy/client.toml"
+const tmpPath = "/tmp/stupidproxy"
+const tmpClientPath = tmpPath + "/rathole"
+const tmpConfigPath = tmpPath + "/client.toml"
 
 // http
 var httpClient *http.Client
@@ -38,6 +39,12 @@ func debug(message string) {
 
 func main() {
 	defer cleanup()
+
+	// mkdir tmp dir
+	if err := os.MkdirAll(tmpPath, 0755); err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	server = flag.String("server", os.Getenv("STUPIDPROXY_SERVER"), "(required) Server address\n\tExample: https://example.com:8080")
 	token = flag.String("token", os.Getenv("STUPIDPROXY_TOKEN"), "(required) Token used to authenticate with the server")
@@ -101,10 +108,10 @@ func main() {
 
 func cleanup() {
 	fmt.Println("INFO: Exiting tunnel")
-	if err := os.Remove(clientTmpPath); err != nil {
+	if err := os.Remove(tmpConfigPath); err != nil {
 		fmt.Println(err)
 	}
-	if err := os.Remove(clientPath); err != nil {
+	if err := os.Remove(tmpClientPath); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -132,7 +139,7 @@ func get() {
 		clientCache = string(body)
 		fmt.Println("INFO: New client config received")
 		// print to file
-		if err = os.WriteFile(clientTmpPath, body, 0644); err != nil {
+		if err = os.WriteFile(tmpConfigPath, body, 0644); err != nil {
 			fmt.Println(err)
 			return
 		}
@@ -141,7 +148,7 @@ func get() {
 
 func exportBin() {
 	debug("Exporting bin")
-	if err := os.WriteFile(clientPath, filePayload, 0755); err != nil {
+	if err := os.WriteFile(tmpClientPath, filePayload, 0755); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -149,7 +156,7 @@ func exportBin() {
 
 func startBin() {
 	debug("Starting bin")
-	cmd := exec.Command(clientPath, "-c", clientTmpPath)
+	cmd := exec.Command(tmpClientPath, "-c", tmpConfigPath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
