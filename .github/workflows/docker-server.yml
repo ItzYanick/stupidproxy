@@ -1,0 +1,16 @@
+name: Build and publish the server docker image to GitHub Container Registry
+on:
+  release:
+    types: [published]
+
+jobs:
+  docker_publish:
+    runs-on: 'ubuntu-20.04'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build and publish server docker image
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: itzyanick/stupidproxy-server
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: Dockerfile.server
