@@ -4,6 +4,7 @@ _build
 _db
 
 .env
+.env.client
 
 # Logs
 logs

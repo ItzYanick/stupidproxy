@@ -1,0 +1,14 @@
+FROM golang as builder
+WORKDIR /go/src/app
+
+COPY src/client/. .
+COPY scripts scripts
+RUN ./scripts/download-rathole.sh
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux go build -o /go/bin/client
+
+FROM gcr.io/distroless/cc-debian12 as release
+
+COPY --from=builder /go/bin/client /usr/bin/client
+
+ENTRYPOINT ["client"]

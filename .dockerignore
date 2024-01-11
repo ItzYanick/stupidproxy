@@ -1,6 +1,8 @@
 _bin
 _build
 _db
+.env.client
+.env.sample
 
 node_modules
 Dockerfile*

@@ -16,3 +16,17 @@ services:
       - RATHOLE_PORT=9999
       - CADDY_TESTING=true
       - CADDY_EMAIL=example@example.org
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    # only needed for testing because of remote_addr being 127.0.0.1
+    network_mode: host
+    command: -wait
+    # use this file to set token
+    env_file:
+      - .env.client
+    depends_on:
+      - server
+    environment:
+      - STUPIDPROXY_SERVER=http://localhost:3001
