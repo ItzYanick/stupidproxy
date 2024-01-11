@@ -32,7 +32,6 @@ func main() {
 	server = flag.String("server", os.Getenv("STUPIDPROXY_SERVER"), "(required) Server address\n\tExample: https://example.com:8080")
 	token = flag.String("token", os.Getenv("STUPIDPROXY_TOKEN"), "(required) Token used to authenticate with the server")
 	help := flag.Bool("help", false, "Show help")
-	wait := flag.Bool("wait", false, "Wait 1 second before starting the tunnel")
 
 	flag.Parse()
 
@@ -41,7 +40,8 @@ func main() {
 		return
 	}
 
-	if *wait {
+	// this is a hack to wait for the server to be ready
+	if os.Getenv("STUPIDPROXY_WAIT") != "" {
 		time.Sleep(1 * time.Second)
 	}
 

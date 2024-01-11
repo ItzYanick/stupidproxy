@@ -22,7 +22,6 @@ services:
       dockerfile: Dockerfile.client
     # only needed for testing because of remote_addr being 127.0.0.1
     network_mode: host
-    command: -wait
     # use this file to set token
     env_file:
       - .env.client
@@ -30,3 +29,4 @@ services:
       - server
     environment:
       - STUPIDPROXY_SERVER=http://localhost:3001
+      - STUPIDPROXY_WAIT=true
