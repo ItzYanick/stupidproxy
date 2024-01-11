@@ -5,12 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"os/signal"
 	"syscall"
 	"time"
-	"unsafe"
 )
 
 //go:generate mkdir -p ./_bin
@@ -18,7 +18,8 @@ import (
 //go:embed _bin/rathole
 var filePayload []byte
 
-const clientTmpPath = "/tmp/stupidproxy-client.toml"
+const clientPath = "/tmp/stupidproxy/rathole"
+const clientTmpPath = "/tmp/stupidproxy/client.toml"
 
 // http
 var httpClient *http.Client
@@ -28,7 +29,16 @@ var clientCache string
 var token *string
 var server *string
 
+func debug(message string) {
+	if os.Getenv("STUPIDPROXY_DEBUG") == "" {
+		return
+	}
+	fmt.Println("DEBUG: " + message)
+}
+
 func main() {
+	defer cleanup()
+
 	server = flag.String("server", os.Getenv("STUPIDPROXY_SERVER"), "(required) Server address\n\tExample: https://example.com:8080")
 	token = flag.String("token", os.Getenv("STUPIDPROXY_TOKEN"), "(required) Token used to authenticate with the server")
 	help := flag.Bool("help", false, "Show help")
@@ -66,18 +76,41 @@ func main() {
 
 	go func() {
 		for {
-			time.Sleep(30 * time.Second)
+			debug("Sleeping for 10 seconds")
+			time.Sleep(10 * time.Second)
+			debug("Done sleeping")
 			get()
+			debug("Done getting")
 		}
 	}()
 
 	fmt.Println("INFO: Starting tunnel")
 
-	embedRun()
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		cleanup()
+		os.Exit(1)
+	}()
 
+	exportBin()
+	startBin()
+	fmt.Println("exit?")
+}
+
+func cleanup() {
+	fmt.Println("INFO: Exiting tunnel")
+	if err := os.Remove(clientTmpPath); err != nil {
+		fmt.Println(err)
+	}
+	if err := os.Remove(clientPath); err != nil {
+		fmt.Println(err)
+	}
 }
 
 func get() {
+	debug("Getting config from server")
 	req, err := http.NewRequest("GET", *server+"/api/v1/clientOnly/generate", nil)
 	if err != nil {
 		fmt.Println(err)
@@ -106,64 +139,21 @@ func get() {
 	}
 }
 
-func embedRun() {
-	fd, err := MemfdCreate("/rathole")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = CopyToMem(fd, filePayload)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = ExecveAt(fd)
-	if err != nil {
-		log.Fatal(err)
+func exportBin() {
+	debug("Exporting bin")
+	if err := os.WriteFile(clientPath, filePayload, 0755); err != nil {
+		fmt.Println(err)
+		return
 	}
 }
 
-func MemfdCreate(path string) (r1 uintptr, err error) {
-	s, err := syscall.BytePtrFromString(path)
-	if err != nil {
-		return 0, err
+func startBin() {
+	debug("Starting bin")
+	cmd := exec.Command(clientPath, "-c", clientTmpPath)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Println(err)
+		return
 	}
-
-	r1, _, errno := syscall.Syscall(319, uintptr(unsafe.Pointer(s)), 0, 0)
-
-	if int(r1) == -1 {
-		return r1, errno
-	}
-
-	return r1, nil
-}
-
-func CopyToMem(fd uintptr, buf []byte) (err error) {
-	_, err = syscall.Write(int(fd), buf)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func ExecveAt(fd uintptr) (err error) {
-	s, err := syscall.BytePtrFromString("")
-	if err != nil {
-		return err
-	}
-	argv, err := syscall.SlicePtrFromStrings([]string{"rathole", "-c", clientTmpPath})
-	if err != nil {
-		fmt.Println("slice ptr from strings error")
-		return err
-	}
-	ret, _, errno := syscall.Syscall6(322, fd, uintptr(unsafe.Pointer(s)), uintptr(unsafe.Pointer(&argv[0])), 0, 0x1000, 0)
-	if int(ret) == -1 {
-		fmt.Println("execveat error")
-		return errno
-	}
-
-	// never hit
-	log.Println("should never hit")
-	return err
 }
