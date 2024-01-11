@@ -11,22 +11,33 @@ import * as clientOnly from './routes/clientOnly'
 import {
   checkForRathole,
   generateAndSaveServerConfig,
+  runCaddy,
   runRathole,
+  checkForCaddy,
 } from './misc/bin'
 import { loadPorts } from './misc/ports'
 
+// check if _bin is installed
 const ratholeInstalled = await checkForRathole()
-
+const caddyInstalled = await checkForCaddy()
 if (!ratholeInstalled) {
   throw new Error('Rathole not installed')
 }
+if (!caddyInstalled) {
+  throw new Error('Caddy not installed')
+}
 
+// load ports from db to var cache
 loadPorts()
 
-generateAndSaveServerConfig()
+// generate server config
+generateAndSaveServerConfig(true)
 
+// start rathole and caddy
 runRathole()
+runCaddy()
 
+// start express
 const app = express()
 app.use(express.json())
 

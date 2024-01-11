@@ -17,14 +17,25 @@ export const checkForRathole = (): Promise<boolean> => {
   return Bun.file(ratholeBinPath).exists()
 }
 
-export const generateAndSaveServerConfig = (): void => {
+export const checkForCaddy = (): Promise<boolean> => {
+  return Bun.file(path.join(binFolderPath, 'caddy')).exists()
+}
+
+export const generateAndSaveServerConfig = (init: boolean = false): void => {
   const tunnels = db.tunnels.findAll()
   Bun.write(ratholeConfigPath, ratholeConfig.generateServerConfig(tunnels))
   Bun.write(caddyConfigPath, caddyConfig.generateServerConfig(tunnels))
+  if (!init) {
+    reloadCaddy()
+  }
 }
 
 export const checkRunningRathole = (): Promise<boolean> => {
   return Bun.file(path.join(configFolderPath, 'pid_rathole')).exists()
+}
+
+export const checkRunningCaddy = (): Promise<boolean> => {
+  return Bun.file(path.join(configFolderPath, 'pid_caddy')).exists()
 }
 
 export const runRathole = (): void => {
@@ -47,6 +58,46 @@ export const runRathole = (): void => {
   })
 }
 
+export const runCaddy = (): void => {
+  checkRunningCaddy().then((running) => {
+    if (running) {
+      console.log('Caddy already running')
+      return
+    }
+    const proc = Bun.spawn(
+      [path.join(binFolderPath, 'caddy'), 'run', '-c', caddyConfigPath],
+      {
+        onExit: () => {
+          console.log('Caddy exited')
+          cleanup()
+        },
+        stdout: 'inherit',
+        stderr: 'inherit',
+      }
+    )
+    // write pid to file
+    Bun.write(path.join(configFolderPath, 'pid_caddy'), proc.pid.toString())
+    console.log('Caddy started')
+  })
+}
+
+export const reloadCaddy = (): void => {
+  checkRunningCaddy().then((running) => {
+    if (!running) {
+      console.log('Caddy not running')
+      return
+    }
+    Bun.spawn(
+      [path.join(binFolderPath, 'caddy'), 'reload', '-c', caddyConfigPath],
+      {
+        stdout: 'inherit',
+        stderr: 'inherit',
+      }
+    )
+    console.log('Caddy reloaded')
+  })
+}
+
 const cleanup = (): void => {
   checkRunningRathole()
     .then((running) => {
@@ -58,7 +109,18 @@ const cleanup = (): void => {
       console.log('Rathole stopped')
     })
     .then(() => {
-      process.exit()
+      return checkRunningCaddy()
+    })
+    .then((running) => {
+      if (!running) {
+        return
+      }
+      unlinkSync(path.join(configFolderPath, 'pid_caddy'))
+      console.log('Caddy stopped')
+    })
+    .then(() => {
+      console.log('Exiting...')
+      process.exit(0)
     })
 }
 
