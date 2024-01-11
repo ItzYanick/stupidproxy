@@ -19,7 +19,7 @@ export const generateServerConfig = (tunnels: Tunnel[]): string => {
     if (!isHTTP) continue
 
     config += `${tunnel.type}://${tunnel.hostname} {\n`
-    config += `  reverse_proxy ${tunnel.target}\n`
+    config += `  reverse_proxy ${process.env.RATHOLE_BIND_HTTP}:${tunnel.port}\n`
     config += '}\n'
   }
   return config
