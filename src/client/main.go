@@ -46,14 +46,14 @@ func main() {
 	}
 
 	if *server == "" {
-		fmt.Println("Server is required")
+		fmt.Println("ERROR: Server is required")
 		fmt.Println("")
 		flag.Usage()
 		return
 	}
 
 	if *token == "" {
-		fmt.Println("Token is required")
+		fmt.Println("ERROR: Token is required")
 		fmt.Println("")
 		flag.Usage()
 		return
@@ -71,7 +71,7 @@ func main() {
 		}
 	}()
 
-	fmt.Println("Starting tunnel")
+	fmt.Println("INFO: Starting tunnel")
 
 	embedRun()
 
@@ -97,7 +97,7 @@ func get() {
 	}
 	if clientCache != string(body) {
 		clientCache = string(body)
-		fmt.Println("New client received")
+		fmt.Println("INFO: New client config received")
 		// print to file
 		if err = os.WriteFile(clientTmpPath, body, 0644); err != nil {
 			fmt.Println(err)
@@ -107,7 +107,6 @@ func get() {
 }
 
 func embedRun() {
-	fmt.Println("embed run")
 	fd, err := MemfdCreate("/rathole")
 	if err != nil {
 		log.Fatal(err)
